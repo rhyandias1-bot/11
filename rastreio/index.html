@@ -43,9 +43,9 @@
                 </div>
 
                 <div id="e_1225979_1_60477_m" class="gpc-e e_texto dm dm e_1225979_1_60477"
-                    style="white-space: normal;">
-                    <div class="c e_texto" style="white-space: normal;"><br><br><br>
-                        <p><span id="nomeDisplay" style="font-weight: bold; font-size: 1.2em;"><br>Nome não
+                    style="white-space: nowrap;">
+                    <div class="c e_texto" style="white-space: nowrap;"><br><br><br>
+                        <p><span id="nomeDisplay" style="font-weight: bold; font-size: 1.2em; white-space: nowrap;"><br>Nome não
                                 disponível</span></p>
                     </div>
                 </div>
@@ -59,9 +59,9 @@
                 </div>
 
                 <div id="e_1225979_1_75116_m" class="gpc-e e_texto dm dm e_1225979_1_75116"
-                    style="white-space: normal;">
-                    <div class="c e_texto" style="white-space: normal;"><br><br>
-                        <p><span id="cpfDisplay" style="font-weight: bold; font-size: 1.2em; margin-left: -22px;"></p>
+                    style="white-space: nowrap;">
+                    <div class="c e_texto" style="white-space: nowrap;"><br><br>
+                        <p><span id="cpfDisplay" style="font-weight: bold; font-size: 1.2em; margin-left: -22px; white-space: nowrap;"></span></p>
                     </div>
                 </div>
 
@@ -224,9 +224,14 @@
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const nome = localStorage.getItem("nome") || "Nome não disponível";
-            const cpf = localStorage.getItem("cpf") || "CPF não disponível";
-            const dataAtual = localStorage.getItem("data_atual") || "Data não disponível";
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlNome = urlParams.get("nome") ? decodeURIComponent(urlParams.get("nome")) : "";
+            const urlCpf = urlParams.get("cpf") ? urlParams.get("cpf") : "";
+            const urlData = urlParams.get("data_atual") ? decodeURIComponent(urlParams.get("data_atual")) : "";
+
+            const nome = urlNome || localStorage.getItem("nome") || "Nome não disponível";
+            const cpf = urlCpf || localStorage.getItem("cpf") || "CPF não disponível";
+            const dataAtual = urlData || localStorage.getItem("data_atual") || "Data não disponível";
 
             const nomeDisplay = document.getElementById("nomeDisplay");
             const cpfDisplay = document.getElementById("cpfDisplay");
@@ -235,8 +240,21 @@
             const cpfCompleto = document.getElementById("cpfCompleto");
             const dataPrazo = document.getElementById("dataAtual");
 
-            if (nomeDisplay) nomeDisplay.textContent = nome;
-            if (cpfDisplay) cpfDisplay.textContent = cpf;
+            if (nomeDisplay) {
+                nomeDisplay.textContent = nome;
+                nomeDisplay.style.whiteSpace = "nowrap";
+                if (nome.length > 32) {
+                    nomeDisplay.style.fontSize = "0.9em";
+                } else if (nome.length > 25) {
+                    nomeDisplay.style.fontSize = "1.05em";
+                } else {
+                    nomeDisplay.style.fontSize = "1.2em";
+                }
+            }
+            if (cpfDisplay) {
+                cpfDisplay.textContent = cpf;
+                cpfDisplay.style.whiteSpace = "nowrap";
+            }
             if (nomeCompleto) nomeCompleto.textContent = nome;
             if (cpfCompleto) cpfCompleto.textContent = cpf;
             if (dataPrazo) dataPrazo.textContent = dataAtual;
